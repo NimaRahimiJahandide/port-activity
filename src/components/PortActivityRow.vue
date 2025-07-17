@@ -1,5 +1,5 @@
 <template>
-    <tr class="border-b border-[#f3f3f3]" :class="{ 'bg-red-50 border-red-300': isOutOfOrder }">
+    <tr class="border-b border-[#f3f3f3] " :class="{ 'bg-red-100': isOutOfOrder }">
         <!-- Day -->
         <td class="px-3 py-2 text-sm">
             {{ formatDay(row.fromDate) }}
@@ -55,18 +55,19 @@
 
         <!-- Actions -->
         <td class="px-3 py-2">
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center justify-end space-x-2">
                 <button v-if="isOutOfOrder" @click="$emit('auto-adjust', index)"
-                    class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs" title="Auto Adjust">
-                    ⚡
+                    class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs cursor-pointer" title="Auto Adjust">
+                    ✅
                 </button>
-                <button @click="$emit('clone', index)" class="text-white px-2 py-1 rounded text-xs cursor-pointer"
+                <!-- Only show Clone for non-first rows -->
+                <button v-if="index > 0" @click="$emit('clone', index)" class="text-white px-2 py-1 rounded text-xs cursor-pointer"
                     title="Clone">
                     <img class="size-4" src="../../icons/copy.svg" alt="clone">
                 </button>
                 <button @click="$emit('confirm-delete', index)"
                     class=" text-white px-2 py-1 rounded text-xs cursor-pointer" title="Delete">
-                    <img class="size-4" src="../../icons/trash.svg" alt="delete">
+                    <img class="size-5" src="../../icons/trash.svg" alt="delete">
                 </button>
             </div>
         </td>
