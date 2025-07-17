@@ -63,11 +63,11 @@
                 <!-- Only show Clone for non-first rows -->
                 <button v-if="index > 0" @click="$emit('clone', index)" class="text-white px-2 py-1 rounded text-xs cursor-pointer"
                     title="Clone">
-                    <img class="size-4" src="../../icons/copy.svg" alt="clone">
+                    <img class="size-4" src="/icons/copy.svg" alt="clone">
                 </button>
                 <button @click="$emit('confirm-delete', index)"
                     class=" text-white px-2 py-1 rounded text-xs cursor-pointer" title="Delete">
-                    <img class="size-5" src="../../icons/trash.svg" alt="delete">
+                    <img class="size-5" src="/icons/trash.svg" alt="delete">
                 </button>
             </div>
         </td>
