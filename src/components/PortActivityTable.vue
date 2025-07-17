@@ -1,56 +1,68 @@
 <template>
-  <div class="p-6 bg-white">
+  <div class="p-6 bg-white shadow-sm rounded-lg">
     <!-- Header -->
     <div class="mb-4 flex justify-between items-center">
-      <h2 class="text-xl font-semibold text-gray-800">Port Activity</h2>
-      <button
-        @click="addNewRow"
-        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors"
-      >
+      <h2 class="text-xl font-semibold text-gray-800 border-l-4 pl-1.5 border-[#5096ff]">Port Activity</h2>
+      <button @click="addNewRow"
+        class="bg-[#f7f7f7] text-gray-800 px-4 py-2 rounded-md border-2 border-[#ececec] transition-colors cursor-pointer">
         + Add New
       </button>
     </div>
 
     <!-- Table -->
     <div class="overflow-x-auto">
-      <table class="min-w-full border-collapse border border-gray-300">
+      <table class="min-w-full rounded-xl overflow-hidden">
         <thead>
-          <tr class="bg-gray-50 text-sm font-medium text-gray-700">
-            <th class="border px-3 py-2 text-left">Day</th>
-            <th class="border px-3 py-2 text-left">Activity Type</th>
-            <th class="border px-3 py-2 text-left">From Date & Time</th>
-            <th class="border px-3 py-2 text-left">Duration</th>
-            <th class="border px-3 py-2 text-left">%</th>
-            <th class="border px-3 py-2 text-left">To Date & Time</th>
-            <th class="border px-3 py-2 text-left">Remarks</th>
-            <th class="border px-3 py-2 text-left">Deductions</th>
-            <th class="border px-3 py-2 text-left">Actions</th>
+          <tr class="bg-[#f1f1f1] text-sm border border-[#f3f3f3] text-gray-700">
+            <th class="relative px-3 py-2 text-left">
+              <span>Day</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Activity Type</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>From Date &amp; Time</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Duration</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>%</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>To Date &amp; Time</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Remarks</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Deductions</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Actions</span>
+            </th>
           </tr>
         </thead>
+
         <tbody>
-          <PortActivityRow
-            v-for="(row, index) in rows"
-            :key="row.id"
-            :row="row"
-            :index="index"
-            :is-out-of-order="isRowOutOfOrder(index)"
-            :activity-types="activityTypes"
-            @clone="cloneRow"
-            @auto-adjust="autoAdjustRow"
-            @confirm-delete="confirmDelete"
-            @update-row="updateToDate"
-            @update-deductions="updateDeductions"
-          />
+          <PortActivityRow v-for="(row, index) in rows" :key="row.id" :row="row" :index="index"
+            :is-out-of-order="isRowOutOfOrder(index)" :activity-types="activityTypes" @clone="cloneRow"
+            @auto-adjust="autoAdjustRow" @confirm-delete="confirmDelete" @update-row="updateToDate"
+            @update-deductions="updateDeductions" />
         </tbody>
       </table>
     </div>
 
     <!-- Delete Modal -->
-    <DeleteModal
-      v-if="showDeleteModal"
-      @cancel="cancelDelete"
-      @confirm="deleteRow"
-    />
+    <DeleteModal v-if="showDeleteModal" @cancel="cancelDelete" @confirm="deleteRow" />
   </div>
 </template>
 
