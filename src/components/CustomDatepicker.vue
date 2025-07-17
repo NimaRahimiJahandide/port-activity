@@ -78,27 +78,44 @@
 
           <!-- Right side - Time picker -->
           <div v-if="enableTimePicker"
-            class="flex flex-col justify-start flex-shrink-0 w-[140px] border-l border-gray-200 pl-5">
+            class="flex flex-col justify-start flex-shrink-0 w-[220px] border-l border-gray-200 ">
             <div class="mb-5">
-              <h3 class="text-sm font-semibold text-gray-700 m-0">Time</h3>
+              <div class="flex justify-center gap-2 mt-2 text-lg font-semibold text-gray-700">
+                <span>{{ selectedHour.toString().padStart(2, '0') }}</span>:
+                <span>{{ selectedMinute.toString().padStart(2, '0') }}</span>:
+                <span>{{ selectedSecond.toString().padStart(2, '0') }}</span>
+              </div>
             </div>
-            <div class="flex flex-col gap-4">
-              <div class="flex items-center gap-2">
-                <label class="text-xs font-medium text-gray-500 min-w-[40px]">Hours</label>
-                <input v-model="selectedHour" type="number" min="0" max="23" @change="updateTime"
-                  class="w-[50px] px-2 py-1 border border-gray-300 rounded-md text-center text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+            <div class="flex gap-2 justify-center border-t border-gray-100 -mt-2 pt-2">
+              <!-- Hours column -->
+              <div class="flex flex-col items-center border-r border-gray-100 pr-2">
+                <div class="overflow-y-auto max-h-[285px] w-[60px] rounded-lg scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
+                  <div v-for="h in 24" :key="'h-' + h"
+                    @click="selectHour(h - 1)" class="rounded-lg"
+                    :class="[selectedHour === (h-1) ? 'bg-[#e6f7ff] text-blue-700 font-bold' : 'hover:bg-blue-50', 'cursor-pointer text-center py-2 text-md']">
+                    {{ (h-1).toString().padStart(2, '0') }}
+                  </div>
+                </div>
               </div>
-              <div class="text-center text-sm font-semibold text-gray-700">:</div>
-              <div class="flex items-center gap-2">
-                <label class="text-xs font-medium text-gray-500 min-w-[40px]">Minutes</label>
-                <input v-model="selectedMinute" type="number" min="0" max="59" @change="updateTime"
-                  class="w-[50px] px-2 py-1 border border-gray-300 rounded-md text-center text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+              <!-- Minutes column -->
+              <div class="flex flex-col items-center border-r border-gray-100 pr-2">
+                <div class="overflow-y-auto max-h-[285px] w-[60px] rounded-lg scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
+                  <div v-for="m in 60" :key="'m-' + m"
+                    @click="selectMinute(m - 1)" class="rounded-lg"
+                    :class="[selectedMinute === (m-1) ? 'bg-[#e6f7ff] text-blue-700 font-bold' : 'hover:bg-blue-50', 'cursor-pointer text-center py-2 text-md']">
+                    {{ (m-1).toString().padStart(2, '0') }}
+                  </div>
+                </div>
               </div>
-              <div class="text-center text-sm font-semibold text-gray-700">:</div>
-              <div class="flex items-center gap-2">
-                <label class="text-xs font-medium text-gray-500 min-w-[40px]">Seconds</label>
-                <input v-model="selectedSecond" type="number" min="0" max="59" @change="updateTime"
-                  class="w-[50px] px-2 py-1 border border-gray-300 rounded-md text-center text-sm font-medium focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
+              <!-- Seconds column -->
+              <div class="flex flex-col items-center">
+                <div class="overflow-y-auto max-h-[285px] w-[60px] rounded-lg scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
+                  <div v-for="s in 60" :key="'s-' + s"
+                    @click="selectSecond(s - 1)" class="rounded-lg"
+                    :class="[selectedSecond === (s-1) ? 'bg-[#e6f7ff] text-blue-700 font-bold' : 'hover:bg-blue-50', 'cursor-pointer text-center py-2 text-md']">
+                    {{ (s-1).toString().padStart(2, '0') }}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -324,7 +341,7 @@ const getDayClass = (day) => {
   } else if (day.isSelected) {
     classes.push('bg-[#1890ff]', 'text-white', 'font-semibold', 'hover:bg-blue-600', 'cursor-pointer');
   } else if (day.isToday) {
-    classes.push('bg-blue-100', 'text-blue-900', 'font-semibold', 'cursor-pointer');
+    classes.push('bg-[#e6f7ff]', 'text-blue-900', 'font-semibold', 'cursor-pointer');
   } else {
     classes.push('text-gray-700', 'hover:bg-gray-100', 'cursor-pointer');
   }
@@ -384,6 +401,18 @@ const handleClickOutside = (event) => {
   }
 }
 
+const selectHour = (h) => {
+  selectedHour.value = h
+  updateTime()
+}
+const selectMinute = (m) => {
+  selectedMinute.value = m
+  updateTime()
+}
+const selectSecond = (s) => {
+  selectedSecond.value = s
+  updateTime()
+}
 
 
 // Lifecycle
@@ -408,3 +437,12 @@ watch(() => props.modelValue, (newValue) => {
   }
 })
 </script>
+<style scoped>
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+</style>
