@@ -44,7 +44,7 @@ const isOpen = ref(false)
 const dropdown = ref(null)
 
 const displayValue = computed(() => {
-  return props.modelValue || 'Select...'
+  return props.modelValue || 'Unknown'
 })
 
 const toggle = () => {
