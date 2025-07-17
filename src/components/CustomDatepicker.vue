@@ -8,7 +8,9 @@
 
     <!-- Calendar popup -->
     <div v-if="isOpen" :style="popupStyle"
-      class="fixed bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden min-w-[420px] z-50">
+      class="fixed bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden min-w-[420px] z-50"
+      @click.stop
+    >
       <section>
         <div class="flex">
           <!-- Left side - Calendar -->
