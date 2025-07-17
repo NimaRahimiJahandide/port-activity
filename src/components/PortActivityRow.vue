@@ -17,14 +17,14 @@
                 :enable-time-picker="true"
                 :format="'dd/MM/yyyy HH:mm:ss'"
                 @update:model-value="onDateTimeChange"
-                input-class="w-full px-2 py-1 rounded text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm pr-10"
+                input-class="w-full px-2 py-1 rounded text-base focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm pr-10"
                 placeholder="Select date and time..."
             />
         </td>
 
         <!-- Duration -->
         <td class="px-3 py-2">
-            <span class="block w-full px-2 py-1 rounded text-sm border border-gray-300 bg-gray-50 text-gray-700 shadow-sm">
+            <span class="block w-full px-2 py-1 rounded text-sm text-gray-700">
                 {{ row.duration || '--:--' }}
             </span>
         </td>
