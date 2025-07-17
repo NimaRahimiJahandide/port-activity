@@ -15,17 +15,20 @@
             <CustomDatepicker
                 v-model="row.fromDate"
                 :enable-time-picker="true"
-                :format="'dd/MM/yyyy HH:mm:ss'"
+                :format="'dd/MM/yyyy'"
                 @update:model-value="onDateTimeChange"
-                input-class="w-full px-2 py-1 rounded text-base focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm pr-10"
+                input-class="w-full py-1 rounded text-base focus:outline-none focus:border-none pr-10"
                 placeholder="Select date and time..."
             />
+            <span class="block font-bold text-xs text-gray-400">
+                {{ formatWeekday(row.fromDate) }}, {{ formatTimeOnly(row.fromDate) }}
+            </span>
         </td>
 
         <!-- Duration -->
         <td class="px-3 py-2">
             <span class="block w-full px-2 py-1 rounded text-sm text-gray-700">
-                {{ row.duration || '--:--' }}
+                {{ formatDuration(row.duration) }}
             </span>
         </td>
 
@@ -36,7 +39,7 @@
 
         <!-- To Date & Time -->
         <td class="px-3 py-2 text-sm">
-            {{ formatDateTime(row.toDate) }}
+            <span v-html="formatDateTimeMultiline(row.toDate)"></span>
         </td>
 
         <!-- Remarks -->
@@ -47,7 +50,7 @@
 
         <!-- Deductions -->
         <td class="px-3 py-2 text-sm">
-            {{ row.deductions }}
+            {{ formatDuration(row.deductions) }}
         </td>
 
         <!-- Actions -->
@@ -96,14 +99,26 @@ const emitUpdateDeductions = () => {
 const formatDateTime = (dateTimeString) => {
     if (!dateTimeString) return ''
     const date = new Date(dateTimeString)
-    return date.toLocaleString('en-US', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-    })
+    // Format: dd/MM/yyyy, HH:mm:ss (24-hour, no AM/PM)
+    const day = String(date.getDate()).padStart(2, '0')
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const year = date.getFullYear()
+    const hours = String(date.getHours()).padStart(2, '0')
+    const minutes = String(date.getMinutes()).padStart(2, '0')
+    const seconds = String(date.getSeconds()).padStart(2, '0')
+    return `${day}/${month}/${year}, ${hours}:${minutes}:${seconds}`
+}
+
+const formatDateTimeMultiline = (dateTimeString) => {
+    if (!dateTimeString) return ''
+    const date = new Date(dateTimeString)
+    const day = String(date.getDate()).padStart(2, '0')
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const year = date.getFullYear()
+    const hours = String(date.getHours()).padStart(2, '0')
+    const minutes = String(date.getMinutes()).padStart(2, '0')
+    const seconds = String(date.getSeconds()).padStart(2, '0')
+    return `${day}/${month}/${year}<br>${hours}:${minutes}:${seconds}`
 }
 
 const formatDay = (dateTimeString) => {
@@ -126,6 +141,37 @@ const onDateTimeChange = (val) => {
     const ss = String(date.getSeconds()).padStart(2, '0')
     props.row.duration = `${hh}:${mm}:${ss}`
     emitUpdate()
+}
+
+const formatTimeOnly = (dateTimeString) => {
+    if (!dateTimeString) return ''
+    const date = new Date(dateTimeString)
+    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit'})
+}
+
+const formatWeekday = (dateTimeString) => {
+    if (!dateTimeString) return ''
+    const date = new Date(dateTimeString)
+    return date.toLocaleDateString('en-US', { weekday: 'short' })
+}
+
+const formatDuration = (durationStr) => {
+    if (!durationStr) return '--:--'
+    // Accepts duration as HH:mm:ss or HH:mm
+    const parts = durationStr.split(':').map(Number)
+    let hours = 0, minutes = 0
+    if (parts.length === 3) {
+        hours = parts[0]
+        minutes = parts[1]
+    } else if (parts.length === 2) {
+        hours = parts[0]
+        minutes = parts[1]
+    } else {
+        return durationStr
+    }
+    const days = Math.floor(hours / 24)
+    const remHours = hours % 24
+    return `${days.toString().padStart(2, '0')}d ${remHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`
 }
 </script>
 
