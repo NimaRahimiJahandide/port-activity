@@ -88,32 +88,47 @@
             </div>
             <div class="flex gap-2 justify-center border-t border-gray-100 -mt-2 pt-2">
               <!-- Hours column -->
-              <div class="flex flex-col items-center border-r border-gray-100 pr-2">
-                <div class="overflow-y-auto max-h-[285px] w-[60px] rounded-lg scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
-                  <div v-for="h in 24" :key="'h-' + h"
-                    @click="selectHour(h - 1)" class="rounded-lg"
-                    :class="[selectedHour === (h-1) ? 'bg-[#e6f7ff] text-blue-700 font-bold' : 'hover:bg-blue-50', 'cursor-pointer text-center py-2 text-md']">
-                    {{ (h-1).toString().padStart(2, '0') }}
+              <div class="flex flex-col items-center border-r border-gray-100 pr-2 w-[60px]">
+                <!-- Selected hour at top -->
+                <div class="rounded-lg bg-[#e6f7ff] text-blue-700 font-bold cursor-pointer text-center py-2 text-md w-full mb-1">
+                  {{ selectedHour.toString().padStart(2, '0') }}
+                </div>
+                <!-- Scrollable list of other hours -->
+                <div class="overflow-y-auto max-h-[220px] w-full rounded-lg scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
+                  <div v-for="h in hoursList" :key="'h-' + h"
+                    @click="selectHour(h)" class="rounded-lg"
+                    :class="['hover:bg-blue-50', 'cursor-pointer text-center py-2 text-md']">
+                    {{ h.toString().padStart(2, '0') }}
                   </div>
                 </div>
               </div>
               <!-- Minutes column -->
-              <div class="flex flex-col items-center border-r border-gray-100 pr-2">
-                <div class="overflow-y-auto max-h-[285px] w-[60px] rounded-lg scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
-                  <div v-for="m in 60" :key="'m-' + m"
-                    @click="selectMinute(m - 1)" class="rounded-lg"
-                    :class="[selectedMinute === (m-1) ? 'bg-[#e6f7ff] text-blue-700 font-bold' : 'hover:bg-blue-50', 'cursor-pointer text-center py-2 text-md']">
-                    {{ (m-1).toString().padStart(2, '0') }}
+              <div class="flex flex-col items-center border-r border-gray-100 pr-2 w-[60px]">
+                <!-- Selected minute at top -->
+                <div class="rounded-lg bg-[#e6f7ff] text-blue-700 font-bold cursor-pointer text-center py-2 text-md w-full mb-1">
+                  {{ selectedMinute.toString().padStart(2, '0') }}
+                </div>
+                <!-- Scrollable list of other minutes -->
+                <div class="overflow-y-auto max-h-[220px] w-full rounded-lg scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
+                  <div v-for="m in minutesList" :key="'m-' + m"
+                    @click="selectMinute(m)" class="rounded-lg"
+                    :class="['hover:bg-blue-50', 'cursor-pointer text-center py-2 text-md']">
+                    {{ m.toString().padStart(2, '0') }}
                   </div>
                 </div>
               </div>
               <!-- Seconds column -->
-              <div class="flex flex-col items-center">
-                <div class="overflow-y-auto max-h-[285px] w-[60px] rounded-lg scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
-                  <div v-for="s in 60" :key="'s-' + s"
-                    @click="selectSecond(s - 1)" class="rounded-lg"
-                    :class="[selectedSecond === (s-1) ? 'bg-[#e6f7ff] text-blue-700 font-bold' : 'hover:bg-blue-50', 'cursor-pointer text-center py-2 text-md']">
-                    {{ (s-1).toString().padStart(2, '0') }}
+              <div class="flex flex-col items-center w-[60px]">
+                <!-- Selected second at top -->
+                <div class="rounded-lg bg-[#e6f7ff] text-blue-700 font-bold cursor-pointer text-center py-2 text-md w-full mb-1">
+                  {{ selectedSecond.toString().padStart(2, '0') }}
+                </div>
+                <!-- Scrollable list of other seconds -->
+                <div class="overflow-y-auto max-h-[220px] w-full rounded-lg scrollbar-hide" style="scrollbar-width: none; -ms-overflow-style: none;">
+                  <div v-for="s in secondsList" :key="'s-' + s"
+                    @click="selectSecond(s)" class="rounded-lg"
+                    :class="['hover:bg-blue-50', 'cursor-pointer text-center py-2 text-md']">
+                    {{ s.toString().padStart(2, '0') }}
                   </div>
                 </div>
               </div>
@@ -213,6 +228,11 @@ const calendarDays = computed(() => {
 
   return days
 })
+
+// Computed arrays for time picker columns (excluding selected value)
+const hoursList = computed(() => Array.from({length: 24}, (_, i) => i).filter(h => h !== selectedHour.value))
+const minutesList = computed(() => Array.from({length: 60}, (_, i) => i).filter(m => m !== selectedMinute.value))
+const secondsList = computed(() => Array.from({length: 60}, (_, i) => i).filter(s => s !== selectedSecond.value))
 
 // Methods
 const togglePicker = () => {
