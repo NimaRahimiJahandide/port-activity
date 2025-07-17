@@ -2,232 +2,164 @@
   <div class="p-6 bg-white rounded-lg shadow-sm mb-6">
     <!-- Header -->
     <div class="mb-4 flex justify-between items-center">
-      <h2 class="text-xl font-semibold text-gray-800">Lay Times</h2>
-      <button
-        @click="addNewRow"
-        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors"
-      >
-        + Add New
-      </button>
+      <h2 class="text-xl font-semibold text-gray-800 border-l-4  pl-1.5 border-[#5096ff]">Lay Times</h2>
     </div>
 
     <!-- Table -->
     <div class="overflow-x-auto">
-      <table class="min-w-full border-collapse border border-gray-300">
+      <table class="min-w-full rounded-xl overflow-hidden">
         <thead>
-          <tr class="bg-gray-50 text-sm font-medium text-gray-700">
-            <th class="border px-3 py-2 text-left">Port Name</th>
-            <th class="border px-3 py-2 text-left">Cargo</th>
-            <th class="border px-3 py-2 text-left">F</th>
-            <th class="border px-3 py-2 text-left">BL Code</th>
-            <th class="border px-3 py-2 text-left">Quantity</th>
-            <th class="border px-3 py-2 text-left">L/D Rate</th>
-            <th class="border px-3 py-2 text-left">Term</th>
-            <th class="border px-3 py-2 text-left">Dem Rate</th>
-            <th class="border px-3 py-2 text-left">Des Rate/D</th>
-            <th class="border px-3 py-2 text-left">Allowed</th>
-            <th class="border px-3 py-2 text-left">Used</th>
-            <th class="border px-3 py-2 text-left">Deduction</th>
-            <th class="border px-3 py-2 text-left">Balance</th>
-            <th class="border px-3 py-2 text-left">Laycan From</th>
-            <th class="border px-3 py-2 text-left">Laycan To</th>
-            <th class="border px-3 py-2 text-left">Actions</th>
+          <tr class="bg-[#f1f1f1] text-sm font-medium border border-[#f3f3f3] text-gray-700">
+            <th class="relative px-3 py-2 text-left">
+              <span>Port Name</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Cargo</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>F</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>BL Code</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Quantity</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>L/D Rate</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Term</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Dem Rate</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Des Rate/D</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Allowed</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Used</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Deduction</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Balance</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Laycan From</span>
+              <div class="absolute right-0 top-[6px] bottom-[6px] w-px bg-gray-300"></div>
+            </th>
+            <th class="relative px-3 py-2 text-left">
+              <span>Laycan To</span>
+            </th>
           </tr>
         </thead>
+
         <tbody>
-          <tr 
-            v-for="(row, index) in rows" 
-            :key="row.id"
-            :class="{ 'bg-blue-50 border-blue-300': selectedRowIndex === index }"
-            @click="selectRow(index)"
-            class="hover:bg-gray-50 cursor-pointer"
-          >
+          <tr v-for="(row, index) in rows" :key="row.id" :class="{ 'bg-blue-50': selectedRowIndex === index }"
+            @click="selectRow(index)" class="hover:bg-gray-50 border border-[#f3f3f3] cursor-pointer">
             <!-- Port Name -->
-            <td class="border px-3 py-2">
-              <div class="flex items-center">
-                <img 
-                  v-if="row.countryFlag" 
-                  :src="row.countryFlag" 
-                  :alt="row.portName"
-                  class="w-4 h-3 mr-2"
-                />
-                <input 
-                  type="text" 
-                  v-model="row.portName" 
-                  class="w-full px-2 py-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Port Name"
-                />
+            <td class="px-3 py-2">
+              <div class="flex items-center text-sm gap-1.5">
+                <span>{{ row.portName }}</span>
+                <img v-if="row.countryFlag" :src="row.countryFlag" :alt="row.portName" class="w-4 h-3 mr-2" />
               </div>
             </td>
 
             <!-- Cargo -->
-            <td class="border px-3 py-2">
-              <select 
-                v-model="row.cargo" 
-                class="w-full px-2 py-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select...</option>
-                <option value="Crude Oil">Crude Oil</option>
-                <option value="Soybeans">Soybeans</option>
-                <option value="Chemicals">Chemicals</option>
-                <option value="LNG">LNG</option>
-                <option value="Container">Container</option>
-                <option value="Bulk">Bulk</option>
-              </select>
+            <td class="px-3 py-2 text-sm ">
+              <span>{{ row.cargo }}</span>
             </td>
 
             <!-- F -->
-            <td class="border px-3 py-2">
-              <select 
-                v-model="row.f" 
-                class="w-full px-2 py-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">-</option>
-                <option value="FOB">FOB</option>
-                <option value="CIF">CIF</option>
-                <option value="CFR">CFR</option>
-                <option value="L">L</option>
-              </select>
+            <td class="px-3 py-2">
+              <span>{{ row.f }}</span>
             </td>
 
             <!-- BL Code -->
-            <td class="border px-3 py-2">
-              <input 
-                type="text" 
-                v-model="row.blCode" 
-                class="w-full px-2 py-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="BL Code"
-              />
+            <td class="px-3 py-2">
+              <span>{{ row.blCode }}</span>
             </td>
 
             <!-- Quantity -->
-            <td class="border px-3 py-2">
-              <input 
-                type="number" 
-                v-model="row.quantity" 
-                class="w-full px-2 py-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="0"
-              />
+            <td class="px-3 py-2">
+              <span>{{ row.quantity }}</span>
             </td>
 
             <!-- L/D Rate -->
-            <td class="border px-3 py-2">
-              <input 
-                type="number" 
-                step="0.01"
-                v-model="row.ldRate" 
-                class="w-full px-2 py-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="0.00"
-              />
+            <td class="px-3 py-2">
+              <span>{{ row.ldRate }}</span>
             </td>
 
             <!-- Term -->
-            <td class="border px-3 py-2">
-              <select 
-                v-model="row.term" 
-                class="w-full px-2 py-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">-</option>
-                <option value="CIF">CIF</option>
-                <option value="FOB">FOB</option>
-                <option value="CFR">CFR</option>
-                <option value="SHINC">SHINC</option>
-              </select>
+            <td class="px-3 py-2">
+              <span>{{ row.term }}</span>
             </td>
 
             <!-- Dem Rate -->
-            <td class="border px-3 py-2">
-              <input 
-                type="number" 
-                v-model="row.demRate" 
-                class="w-full px-2 py-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="0"
-              />
+            <td class="px-3 py-2">
+              <span>{{ row.demRate }}</span>
             </td>
 
             <!-- Des Rate/D -->
-            <td class="border px-3 py-2">
-              <input 
-                type="number" 
-                v-model="row.desRate" 
-                class="w-full px-2 py-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="0"
-              />
+            <td class="px-3 py-2">
+              <span>{{ row.desRate }}</span>
             </td>
 
             <!-- Allowed -->
-            <td class="border px-3 py-2">
-              <input 
-                type="number" 
-                v-model="row.allowed" 
-                class="w-full px-2 py-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="0"
-              />
+            <td class="px-3 py-2">
+              <span>{{ row.allowed }}</span>
             </td>
 
             <!-- Used -->
-            <td class="border px-3 py-2 bg-gray-50">
+            <td class="px-3 py-2">
               <span class="text-sm text-gray-600">{{ formatTime(row.used) }}</span>
             </td>
 
             <!-- Deduction -->
-            <td class="border px-3 py-2 bg-gray-50">
+            <td class="px-3 py-2">
               <span class="text-sm text-gray-600">{{ formatTime(row.deduction) }}</span>
             </td>
 
             <!-- Balance -->
-            <td class="border px-3 py-2 bg-gray-50">
+            <td class="px-3 py-2">
               <span class="text-sm text-gray-600">{{ formatTime(row.balance) }}</span>
             </td>
 
             <!-- Laycan From -->
-            <td class="border px-3 py-2">
-              <input 
-                type="date" 
-                v-model="row.laycanFrom" 
-                class="w-full px-2 py-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+            <td class="px-3 py-2">
+              <span>{{ row.laycanFrom }}</span>
             </td>
 
             <!-- Laycan To -->
-            <td class="border px-3 py-2">
-              <input 
-                type="date" 
-                v-model="row.laycanTo" 
-                class="w-full px-2 py-1 border rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+            <td class="px-3 py-2">
+              <span>{{ row.laycanTo }}</span>
             </td>
 
-            <!-- Actions -->
-            <td class="border px-3 py-2">
-              <div class="flex items-center space-x-2">
-                <button 
-                  @click.stop="cloneRow(index)"
-                  class="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs" 
-                  title="Clone"
-                >
-                  📋
-                </button>
-                <button 
-                  @click.stop="confirmDelete(index)"
-                  class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs" 
-                  title="Delete"
-                >
-                  🗑️
-                </button>
-              </div>
-            </td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <!-- Delete Modal -->
-    <DeleteModal
-      v-if="showDeleteModal"
-      @cancel="cancelDelete"
-      @confirm="deleteRow"
-    />
+    <DeleteModal v-if="showDeleteModal" @cancel="cancelDelete" @confirm="deleteRow" />
   </div>
 </template>
 
@@ -239,11 +171,11 @@ const emit = defineEmits(['row-selected'])
 
 // Sample country flags (you can replace with actual flag images)
 const countryFlags = {
-  'USA': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAyNCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjQiIGhlaWdodD0iMTgiIGZpbGw9IiNGRkZGRkYiLz48cGF0aCBkPSJNMCAwSDI0VjE4SDAiIGZpbGw9IiNGRkZGRkYiLz48cmVjdCB3aWR0aD0iMjQiIGhlaWdodD0iMTgiIGZpbGw9IiNGRkZGRkYiLz48cGF0aCBkPSJNMCAwSDI0VjE4SDAiIGZpbGw9IiNGRkZGRkYiLz48L3N2Zz4=',
-  'Brazil': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAyNCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjQiIGhlaWdodD0iMTgiIGZpbGw9IiMwMEJDMDAiLz48L3N2Zz4=',
-  'Singapore': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAyNCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjQiIGhlaWdodD0iOSIgZmlsbD0iI0ZGRkZGRiIvPjxyZWN0IHk9IjkiIHdpZHRoPSIyNCIgaGVpZ2h0PSI5IiBmaWxsPSIjRkYwMDAwIi8+PC9zdmc+',
-  'Germany': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAyNCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjQiIGhlaWdodD0iNiIgZmlsbD0iIzAwMDAwMCIvPjxyZWN0IHk9IjYiIHdpZHRoPSIyNCIgaGVpZ2h0PSI2IiBmaWxsPSIjRkYwMDAwIi8+PHJlY3QgeT0iMTIiIHdpZHRoPSIyNCIgaGVpZ2h0PSI2IiBmaWxsPSIjRkZEQjAwIi8+PC9zdmc+',
-  'Russia': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCAyNCAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjQiIGhlaWdodD0iNiIgZmlsbD0iI0ZGRkZGRiIvPjxyZWN0IHk9IjYiIHdpZHRoPSIyNCIgaGVpZ2h0PSI2IiBmaWxsPSIjMDA1N0IwIi8+PHJlY3QgeT0iMTIiIHdpZHRoPSIyNCIgaGVpZ2h0PSI2IiBmaWxsPSIjRkYwMDAwIi8+PC9zdmc+'
+  'USA': '../images/usa.webp',
+  'Brazil': '../images/brazil.webp',
+  'Singapore': '../images/singapore.webp',
+  'Germany': '../images/germany.webp',
+  'Russia': '../images/russia.webp'
 }
 
 // States
@@ -258,55 +190,9 @@ const formatTime = (timeString) => {
   return timeString || '00:00:00'
 }
 
-const getCurrentDate = () => {
-  const now = new Date()
-  return now.toISOString().split('T')[0]
-}
-
-// Row logic
-const createNewRow = () => {
-  return {
-    id: nextId++,
-    portName: '',
-    cargo: '',
-    f: '',
-    blCode: '',
-    quantity: 0,
-    ldRate: 0,
-    term: '',
-    demRate: 0,
-    desRate: 0,
-    allowed: 0,
-    used: '00:00:00',
-    deduction: '00:00:00',
-    balance: '00:00:00',
-    laycanFrom: getCurrentDate(),
-    laycanTo: getCurrentDate(),
-    countryFlag: null
-  }
-}
-
-const addNewRow = () => {
-  rows.value.push(createNewRow())
-}
-
 const selectRow = (index) => {
   selectedRowIndex.value = index
   emit('row-selected', rows.value[index])
-}
-
-const cloneRow = (index) => {
-  const row = rows.value[index]
-  const clone = {
-    ...row,
-    id: nextId++
-  }
-  rows.value.splice(index + 1, 0, clone)
-}
-
-const confirmDelete = (index) => {
-  deleteIndex.value = index
-  showDeleteModal.value = true
 }
 
 const cancelDelete = () => {
@@ -344,8 +230,8 @@ const initializeSampleData = () => {
       used: '054:00:00',
       deduction: '014:00:00',
       balance: '014:00:00',
-      laycanFrom: '2025-03-30',
-      laycanTo: '2025-04-05',
+      laycanFrom: '2025/03/30',
+      laycanTo: '2025/04/05',
       countryFlag: countryFlags['USA']
     },
     {
@@ -363,8 +249,8 @@ const initializeSampleData = () => {
       used: '064:00:00',
       deduction: '014:00:00',
       balance: '014:00:00',
-      laycanFrom: '2025-05-08',
-      laycanTo: '2025-05-12',
+      laycanFrom: '2025/05/08',
+      laycanTo: '2025/05/12',
       countryFlag: countryFlags['Brazil']
     },
     {
@@ -382,8 +268,8 @@ const initializeSampleData = () => {
       used: '044:00:00',
       deduction: '000:12:00',
       balance: '000:00:00',
-      laycanFrom: '2025-06-30',
-      laycanTo: '2025-06-03',
+      laycanFrom: '2025/06/30',
+      laycanTo: '2025/06/03',
       countryFlag: countryFlags['Singapore']
     }
   ]
