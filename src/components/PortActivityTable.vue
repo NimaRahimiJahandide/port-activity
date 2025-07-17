@@ -2,11 +2,38 @@
   <div class="p-6 bg-white shadow-sm rounded-lg">
     <!-- Header -->
     <div class="mb-4 flex justify-between items-center">
-      <h2 class="text-xl font-semibold text-gray-800 border-l-4 pl-1.5 border-[#5096ff]">Port Activity</h2>
+      <h2 class="text-xl font-semibold text-gray-800 border-l-4 pl-1.5 border-[#5096ff]">
+        Port Activity
+        <span v-if="selectedLayTime" class="text-sm text-gray-500 ml-2">
+          - {{ selectedLayTime.portName }} ({{ selectedLayTime.cargo }})
+        </span>
+      </h2>
       <button @click="addNewRow"
         class="bg-[#f7f7f7] text-gray-800 px-4 py-2 rounded-md border-2 border-[#ececec] transition-colors cursor-pointer">
         + Add New
       </button>
+    </div>
+
+    <!-- Selected LayTime Info -->
+    <div v-if="selectedLayTime" class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+        <div>
+          <span class="font-semibold text-gray-700">Port:</span>
+          <span class="ml-2">{{ selectedLayTime.portName }}</span>
+        </div>
+        <div>
+          <span class="font-semibold text-gray-700">Cargo:</span>
+          <span class="ml-2">{{ selectedLayTime.cargo }}</span>
+        </div>
+        <div>
+          <span class="font-semibold text-gray-700">Laycan:</span>
+          <span class="ml-2">{{ selectedLayTime.laycanFrom }} - {{ selectedLayTime.laycanTo }}</span>
+        </div>
+        <div>
+          <span class="font-semibold text-gray-700">Allowed Days:</span>
+          <span class="ml-2">{{ selectedLayTime.allowed }}</span>
+        </div>
+      </div>
     </div>
 
     <!-- Table -->
@@ -67,9 +94,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import PortActivityRow from './PortActivityRow.vue'
 import DeleteModal from './DeleteModal.vue'
+
+// Props
+const props = defineProps({
+  selectedLayTime: {
+    type: Object,
+    default: null
+  }
+})
 
 // Activity types
 const activityTypes = [
@@ -89,11 +124,26 @@ const showDeleteModal = ref(false)
 const deleteIndex = ref(-1)
 let nextId = 1
 
+// Watch for selectedLayTime changes
+watch(() => props.selectedLayTime, (newLayTime) => {
+  if (newLayTime) {
+    initializeRowsForLayTime(newLayTime)
+  }
+}, { deep: true })
+
 // Helpers
 const getCurrentDateTime = () => {
   const now = new Date()
   const offset = now.getTimezoneOffset()
   const localDate = new Date(now.getTime() - offset * 60000)
+  return localDate.toISOString().slice(0, 16)
+}
+
+const getLaycanStartDateTime = (laycanFrom) => {
+  if (!laycanFrom) return getCurrentDateTime()
+  const date = new Date(laycanFrom)
+  const offset = date.getTimezoneOffset()
+  const localDate = new Date(date.getTime() - offset * 60000)
   return localDate.toISOString().slice(0, 16)
 }
 
@@ -126,9 +176,38 @@ const createNewRow = (from = null) => {
   }
 }
 
+const initializeRowsForLayTime = (layTime) => {
+  // Clear existing rows
+  rows.value = []
+  nextId = 1
+  
+  // Create initial rows based on layTime data
+  const startDate = getLaycanStartDateTime(layTime.laycanFrom)
+  
+  // Add default activities for the selected port
+  const defaultActivities = [
+    { type: 'Berthing', duration: '02:00', percentage: 0 },
+    { type: 'Loading', duration: '24:00', percentage: 100 },
+    { type: 'Unberthing', duration: '01:00', percentage: 0 }
+  ]
+  
+  let currentDate = startDate
+  defaultActivities.forEach(activity => {
+    const row = createNewRow(currentDate)
+    row.activityType = activity.type
+    row.duration = activity.duration
+    row.percentage = activity.percentage
+    row.toDate = addHoursToDateTime(currentDate, activity.duration)
+    row.remarks = `${activity.type} at ${layTime.portName}`
+    updateDeductions(rows.value.length)
+    rows.value.push(row)
+    currentDate = row.toDate
+  })
+}
+
 const addNewRow = () => {
   const last = rows.value[rows.value.length - 1]
-  const fromDate = last?.toDate || getCurrentDateTime()
+  const fromDate = last?.toDate || (props.selectedLayTime ? getLaycanStartDateTime(props.selectedLayTime.laycanFrom) : getCurrentDateTime())
   rows.value.push(createNewRow(fromDate))
 }
 
@@ -193,6 +272,8 @@ const deleteRow = () => {
   cancelDelete()
 }
 
-// Init
-addNewRow()
+// Expose methods for parent component
+defineExpose({
+  updateFromLayTime: initializeRowsForLayTime
+})
 </script>
