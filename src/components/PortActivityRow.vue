@@ -24,12 +24,7 @@
 
         <!-- % -->
         <td class="px-3 py-2">
-            <select v-model="row.percentage" @change="emitUpdateDeductions"
-                class="w-full px-2 py-1 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="0">0%</option>
-                <option value="50">50%</option>
-                <option value="100">100%</option>
-            </select>
+            <CustomDropdown v-model="row.percentage" @change="emitUpdateDeductions" />
         </td>
 
         <!-- To Date & Time -->
@@ -55,13 +50,13 @@
                     class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs" title="Auto Adjust">
                     ⚡
                 </button>
-                <button @click="$emit('clone', index)"
-                    class="text-white px-2 py-1 rounded text-xs cursor-pointer" title="Clone">
+                <button @click="$emit('clone', index)" class="text-white px-2 py-1 rounded text-xs cursor-pointer"
+                    title="Clone">
                     <img class="size-4" src="../../icons/copy.svg" alt="clone">
                 </button>
                 <button @click="$emit('confirm-delete', index)"
                     class=" text-white px-2 py-1 rounded text-xs cursor-pointer" title="Delete">
-                    <img class="size-4"src="../../icons/trash.svg" alt="delete">
+                    <img class="size-4" src="../../icons/trash.svg" alt="delete">
                 </button>
             </div>
         </td>
@@ -71,6 +66,7 @@
 <script setup>
 import { toRefs } from 'vue'
 import ActivityTypeSelect from './ActivityTypeSelect.vue'
+import CustomDropdown from './CustomDropdown .vue'
 
 const props = defineProps({
     row: Object,

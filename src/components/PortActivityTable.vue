@@ -11,7 +11,7 @@
 
     <!-- Table -->
     <div class="overflow-x-auto">
-      <table class="min-w-full rounded-xl overflow-hidden">
+      <table class="min-w-full rounded-xl overflow">
         <thead>
           <tr class="bg-[#f1f1f1] text-sm border border-[#f3f3f3] text-gray-700">
             <th class="relative px-3 py-2 text-left">
