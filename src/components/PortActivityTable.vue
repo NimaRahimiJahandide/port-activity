@@ -67,9 +67,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import PortActivityRow from './PortActivityRow.vue'
 import DeleteModal from './DeleteModal.vue'
+
+// Props
+const props = defineProps({
+  selectedLayTime: Object
+})
 
 // Activity types
 const activityTypes = [
@@ -192,6 +197,64 @@ const deleteRow = () => {
   if (deleteIndex.value >= 0) rows.value.splice(deleteIndex.value, 1)
   cancelDelete()
 }
+
+// Generate mock port activity data based on selected laytime row
+function generateMockPortActivities(layTimeRow) {
+  if (!layTimeRow) return []
+  
+  // Convert date format from "YYYY/MM/DD" to "YYYY-MM-DD" for proper ISO string
+  const formatDateForInput = (dateStr) => {
+    if (!dateStr) return getCurrentDateTime()
+    // Convert "2025/03/30" to "2025-03-30"
+    return dateStr.replace(/\//g, '-')
+  }
+  
+  const laycanFromFormatted = formatDateForInput(layTimeRow.laycanFrom)
+  const laycanToFormatted = formatDateForInput(layTimeRow.laycanTo)
+  
+  return [
+    {
+      id: nextId++,
+      activityType: 'Loading',
+      fromDate: `${laycanFromFormatted}T08:00`,
+      duration: '04:00',
+      percentage: 10,
+      toDate: `${laycanFromFormatted}T12:00`,
+      remarks: `Loaded ${layTimeRow.cargo}`,
+      deductions: '00:24'
+    },
+    {
+      id: nextId++,
+      activityType: 'Waiting',
+      fromDate: `${laycanFromFormatted}T12:00`,
+      duration: '02:00',
+      percentage: 0,
+      toDate: `${laycanFromFormatted}T14:00`,
+      remarks: 'Waiting for berth',
+      deductions: '00:00'
+    },
+    {
+      id: nextId++,
+      activityType: 'Unloading',
+      fromDate: `${laycanToFormatted}T09:00`,
+      duration: '03:00',
+      percentage: 5,
+      toDate: `${laycanToFormatted}T12:00`,
+      remarks: `Unloaded ${layTimeRow.cargo}`,
+      deductions: '00:09'
+    }
+  ]
+}
+
+// Watch for changes to selectedLayTime and update rows
+watch(
+  () => props.selectedLayTime,
+  (newVal) => {
+    if (newVal) {
+      rows.value = generateMockPortActivities(newVal)
+    }
+  }
+)
 
 // Init
 addNewRow()
